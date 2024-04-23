@@ -28,18 +28,39 @@ class Product
     return $statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function add($name, $type, $price, $quantity)
+  public function addQuantity($type, $quantity)
   {
-    $sql = "INSERT INTO products (name, type, price, quantity) VALUES (:name, :type, :price, :quantity)";
+    $sql = "UPDATE products SET quantity = quantity + :quantity WHERE type = :type";
+    $statement = $this->db->prepare($sql);
+    $statement->execute([
+      ':type' => $type,
+      ':quantity' => $quantity
+    ]);
+  }
+
+  public function removeQuantity($type, $quantity)
+  {
+    $sql = "UPDATE products SET quantity = GREATEST(quantity - :quantity, 0) WHERE type = :type";
+    $statement = $this->db->prepare($sql);
+    $statement->execute([
+      ':type' => $type,
+      ':quantity' => $quantity
+    ]);
+  }
+
+  public function add($type, $price, $quantity)
+  {
+    $sql = "INSERT INTO products (type, price, quantity) VALUES (:type, :price, :quantity)";
 
     $statement = $this->db->prepare($sql);
     $statement->execute([
-      ':name' => $name,
       ':type' => $type,
       ':price' => $price,
       ':quantity' => $quantity
     ]);
   }
+
+
 
   public function remove($id)
   {
@@ -49,14 +70,14 @@ class Product
     $statement->execute([':id' => $id]);
   }
 
-  public function removeProducts($type, $name, $quantity)
+
+  public function removeProducts($type, $quantity)
   {
     // Get the IDs of the newest products of the given type and name
-    $sql = "SELECT id FROM products WHERE type = ? AND name = ? ORDER BY id DESC LIMIT ?";
+    $sql = "SELECT id FROM products WHERE type = ? ORDER BY id DESC LIMIT ?";
     $statement = $this->db->prepare($sql);
     $statement->bindValue(1, $type, PDO::PARAM_STR);
-    $statement->bindValue(2, $name, PDO::PARAM_STR);
-    $statement->bindValue(3, (int) $quantity, PDO::PARAM_INT);
+    $statement->bindValue(2, (int) $quantity, PDO::PARAM_INT);
     $statement->execute();
     $ids = $statement->fetchAll(PDO::FETCH_COLUMN);
 

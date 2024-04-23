@@ -19,11 +19,13 @@ class ProductController
 
   public function showBuyForm()
   {
+    $result = $this->getTypes(); // used by the view to display product types
     include 'views/buy.php';
   }
 
   public function showSellForm()
   {
+    $result = $this->getTypes(); // used by the view to display product types
     include 'views/sell.php';
   }
 
@@ -41,10 +43,8 @@ class ProductController
   {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $type = $_POST['product_type'];
-      $name = $_POST['product_name'];
       $quantity = $_POST['quantity'];
-      $price = 100; // TODO: replace with given price
-      $this->model->add($name, $type, $price, $quantity);
+      $this->model->addQuantity($type, $quantity);
     }
   }
 
@@ -52,9 +52,8 @@ class ProductController
   {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $type = $_POST['product_type'];
-      $name = $_POST['product_name'];
       $quantity = $_POST['quantity'];
-      $this->model->removeProducts($type, $name, $quantity);
+      $this->model->removeQuantity($type, $quantity);
     }
   }
 

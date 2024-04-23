@@ -21,4 +21,9 @@ class WarehouseController
   {
     return $this->model->getProductCount();
   }
+
+  public function getQuantity()
+  {
+    return $this->model->getTotalQuantity();
+  }
 }

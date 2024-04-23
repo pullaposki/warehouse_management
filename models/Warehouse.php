@@ -17,4 +17,12 @@ class Warehouse
     $statement->execute();
     return $statement->fetchColumn();
   }
+  public function getTotalQuantity()
+  {
+    $sql = "SELECT SUM(quantity) as total_quantity FROM products";
+    $statement = $this->db->prepare($sql);
+    $statement->execute();
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    return $result['total_quantity'];
+  }
 }
