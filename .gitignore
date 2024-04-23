@@ -1,0 +1,24 @@
+/vendor/
+/.env
+.DS_Store
+/node_modules/
+/public/hot
+/public/storage
+/storage/*.key
+/homestead.yaml
+/Homestead.json
+/.idea/
+/_ide_helper.php
+/_ide_helper_models.php
+/.phpunit.result.cache
+
+# The /vendor/ directory, which contains your Composer dependencies.
+# The /.env file, which contains your environment variables.
+# The /.DS_Store file, which is created by macOS.
+# The /node_modules/ directory, which contains your npm dependencies.
+# The /public/hot and /public/storage directories, which are specific to Laravel.
+# The /storage/*.key files, which are specific to Laravel.
+# The /homestead.yaml and /Homestead.json files, which are specific to Laravel Homestead.
+# The /.idea/ directory, which is created by JetBrains IDEs like PhpStorm.
+# The /_ide_helper.php and /_ide_helper_models.php files, which are created by the Laravel IDE Helper package.
+# The /.phpunit.result.cache file, which is created by PHPUnit.
