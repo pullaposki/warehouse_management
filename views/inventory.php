@@ -1,4 +1,4 @@
-<h1>Inventory</h1>
+<h2>Inventory</h2>
 
 <?php
 require_once 'config.php';

@@ -1,3 +1,9 @@
+<div>
+  <a href="index.php?route=inventory">Inventory</a> |
+  <a href="index.php?route=buy">Buy</a> |
+  <a href="index.php?route=sell">Sell</a>
+</div>
+
 <?php
 $route = $_GET['route'] ?? 'inventory';
 
@@ -13,9 +19,3 @@ switch ($route) {
     break;
 }
 ?>
-
-<div>
-  <a href="index.php?route=inventory">Inventory</a> |
-  <a href="index.php?route=buy">Buy</a> |
-  <a href="index.php?route=sell">Sell</a>
-</div>

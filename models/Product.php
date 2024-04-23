@@ -1,5 +1,6 @@
 <?php
-require_once 'db/DbConnector.php';
+require_once 'config.php';
+require_once PROJECT_ROOT . 'db/DbConnector.php';
 
 class Product
 {
