@@ -8,7 +8,7 @@ $result = $controller->getTypes();
 
 
 <h2>Buy Products</h2>
-<form action="buy_product.php" method="post">
+<form action="index.php?route=add" method="post">
   <label for="product_type">Product Type:</label><br>
   <select id="product_type" name="product_type" required>
     <?php

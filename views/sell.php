@@ -9,7 +9,7 @@ $result = $controller->getTypes();
 ?>
 
 <h2>Sell Products</h2>
-<form action="sell_product.php" method="post">
+<form action="index.php?route=remove" method="post">
   <label for="product_type">Product Type:</label><br>
   <select id="product_type" name="product_type" required>
 

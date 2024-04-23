@@ -11,9 +11,9 @@ class WarehouseController
     $this->model = new Warehouse();
   }
 
+  // default action
   public function index()
   {
-    $productCount = $this->model->getProductCount();
     include 'views/inventory.php';
   }
 

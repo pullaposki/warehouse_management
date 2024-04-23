@@ -5,14 +5,23 @@
 </div>
 
 <?php
+require_once 'controllers/ProductController.php';
+
 $route = $_GET['route'] ?? 'inventory';
+$productController = new ProductController();
 
 switch ($route) {
   case 'buy':
-    include 'views/buy.php';
+    $productController->showBuyForm();
     break;
   case 'sell':
-    include 'views/sell.php';
+    $productController->showSellForm();
+    break;
+  case 'add':
+    $productController->post();
+    break;
+  case 'remove':
+    $productController->remove();
     break;
   default:
     include 'views/inventory.php';

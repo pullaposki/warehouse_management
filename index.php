@@ -9,7 +9,7 @@
 
 <body>
   <h1>Warehouse Management System</h1>
-  <?php require_once 'navbar.php'; ?>
+  <?php require_once 'nav.php'; ?>
 </body>
 
 </html>
