@@ -19,4 +19,12 @@ class Product
     $statement->execute();
     return $statement->fetchAll(PDO::FETCH_ASSOC);
   }
+
+  public function getDistinctTypes()
+  {
+    $sql = "SELECT DISTINCT type FROM products";
+    $statement = $this->db->query($sql);
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
+  }
 }

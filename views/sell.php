@@ -1,15 +1,10 @@
 <?php
 
 require_once 'config.php';
-require_once PROJECT_ROOT . 'db/DbConnector.php';
+require_once PROJECT_ROOT . 'controllers/ProductController.php';
 
-$db = (new DbConnector())->connect();
-
-$sql = "SELECT DISTINCT type FROM products";
-$statement = $db->query($sql);
-$statement->execute();
-
-$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+$controller = new ProductController();
+$result = $controller->getTypes();
 
 ?>
 
@@ -17,6 +12,7 @@ $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 <form action="sell_product.php" method="post">
   <label for="product_type">Product Type:</label><br>
   <select id="product_type" name="product_type" required>
+
     <?php
     if (count($result) > 0) {
       // Output each row
@@ -25,6 +21,7 @@ $result = $statement->fetchAll(PDO::FETCH_ASSOC);
       }
     }
     ?>
+
   </select><br>
   <label for="product_name">Product Name:</label><br>
   <input type="text" id="product_name" name="product_name" required><br>

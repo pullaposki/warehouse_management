@@ -2,10 +2,10 @@
 
 <?php
 require_once 'config.php';
-require_once PROJECT_ROOT . 'models/Warehouse.php';
+require_once PROJECT_ROOT . 'controllers/WarehouseController.php';
 
-$warehouse = new Warehouse();
-$productCount = $warehouse->getProductCount();
+$controller = new WarehouseController();
+$productCount = $controller->getProductCount();
 
 echo "Number of products in the warehouse: $productCount";
 ?>

@@ -1,5 +1,6 @@
 <?php
-require_once 'models/Product.php';
+require_once 'config.php';
+require_once PROJECT_ROOT . 'models/Product.php';
 
 class ProductController
 {
@@ -13,6 +14,17 @@ class ProductController
   public function index()
   {
     $products = $this->model->getAll();
+    $distinctTypes = $this->model->getDistinctTypes();
     include 'views/products.php';
+  }
+
+  public function getAll()
+  {
+    return $this->model->getAll();
+  }
+
+  public function getTypes()
+  {
+    return $this->model->getDistinctTypes();
   }
 }
