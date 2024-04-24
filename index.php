@@ -8,8 +8,20 @@
 </head>
 
 <body>
-  <h1>Warehouse Management System</h1>
-  <?php require_once 'nav.php'; ?>
+  <h1>Warehouse</h1>
+
+  <?php
+
+  require_once __DIR__ . '/db/DbConnector.php';
+  $dbConnector = new DbConnector();
+  $connection = $dbConnector->connect();
+  
+  if ($connection === null) {
+      echo "Failed to connect to the database.";
+  } else {
+      echo "Connected to the database successfully.";
+  }
+  ?>
 </body>
 
 </html>

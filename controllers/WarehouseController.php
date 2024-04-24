@@ -1,6 +1,5 @@
 <?php
-require_once 'config.php';
-require_once PROJECT_ROOT . 'models/Warehouse.php';
+require_once __DIR__ . '/../models/Warehouse.php';
 
 class WarehouseController
 {

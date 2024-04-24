@@ -5,7 +5,7 @@
 </div>
 
 <?php
-require_once 'controllers/ProductController.php';
+require_once __DIR__ . '/controllers/ProductController.php';
 
 $route = $_GET['route'] ?? 'inventory';
 $productController = new ProductController();

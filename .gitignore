@@ -11,6 +11,8 @@
 /_ide_helper.php
 /_ide_helper_models.php
 /.phpunit.result.cache
+php_errors.log
+config.php
 
 # The /vendor/ directory, which contains your Composer dependencies.
 # The /.env file, which contains your environment variables.
