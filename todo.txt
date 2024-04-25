@@ -1,0 +1,2 @@
+- simulate delays when buying / selling
+- add dates

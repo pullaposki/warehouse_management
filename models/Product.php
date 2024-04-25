@@ -11,18 +11,32 @@ class Product
     $this->db = (new DbConnector())->connect();
   }
 
-  public function addProductType($type)
+  public function addProduct($type, $price, $starting_stock)
   {
-    $sql = "INSERT INTO products (type) VALUES (:type)";
+    $sql = "INSERT INTO products (type, price, quantity) VALUES (:type, :price, :quantity)";
     $statement = $this->db->prepare($sql);
-    $statement->execute([':type' => $type]);
+    $statement->execute([':type' => $type, ':price' => $price, ':quantity' => $starting_stock]);
   }
 
-  public function removeProductType($type)
+  public function removeProduct($type)
   {
     $sql = "DELETE FROM products WHERE type = :type";
     $statement = $this->db->prepare($sql);
     $statement->execute([':type' => $type]);
+  }
+
+  public function updateProductPrice($type, $price)
+  {
+    $sql = "UPDATE products SET price = :price WHERE type = :type";
+    $statement = $this->db->prepare($sql);
+    $statement->execute([':type' => $type, ':price' => $price]);
+  }
+
+  public function updateProductType($old_type, $new_type)
+  {
+    $sql = "UPDATE products SET type = :new_type WHERE type = :old_type";
+    $statement = $this->db->prepare($sql);
+    $statement->execute([':old_type' => $old_type, ':new_type' => $new_type]);
   }
 
   public function getAllWithQuantities()
@@ -59,7 +73,7 @@ class Product
 
   public function removeQuantity($type, $quantity)
   {
-    $sql = "UPDATE products SET quantity = GREATEST(quantity - :quantity, 0) WHERE type = :type";
+    $sql = "UPDATE products SET quantity = quantity - :quantity WHERE type = :type";
     $statement = $this->db->prepare($sql);
     $statement->execute([
       ':type' => $type,

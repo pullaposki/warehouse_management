@@ -8,8 +8,8 @@ switch ($route) {
   case 'inventory':
     $productController->showInventory();
     break;
-  case 'manage_stock':
-    $productController->showManageStock();
+  case 'products':
+    $productController->showProductManagement();
     break;
   case 'addToQuantity':
     $productController->addToQuantity();
@@ -17,14 +17,19 @@ switch ($route) {
   case 'removeFromQuantity':
     $productController->removeFromQuantity();
     break;
-  case 'addProductType':
+  case 'addProduct':
     $productController->addProductType();
     break;
-  case 'removeProductType':
+  case 'removeProduct':
     $productController->removeProductTypes();
+    break;
+  case 'updateProductPrice':
+    $productController->updateProductPrice();
+    break;
+  case 'updateProductType':
+    $productController->updateProductType();
     break;
   default:
     $productController->showInventory();
     break;
 }
-?>

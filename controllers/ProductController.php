@@ -22,10 +22,10 @@ class ProductController
     include 'views/inventory.php';
   }
 
-  public function showManageStock()
+  public function showProductManagement()
   {
     $result = $this->getTypes(); // used by the view to display product types
-    include 'views/manage_stock.php';
+    include 'views/products.php';
   }
 
   public function showBuyForm()
@@ -52,9 +52,22 @@ class ProductController
 
   public function addProductType()
   {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $type = $_POST['product_type'];
-      $this->model->addProductType($type);
+      $price = $_POST['price'];
+      $starting_stock = $_POST['starting_stock'];
+
+      // check if a product type with the same name already exists
+      $types = $this->model->getDistinctTypes();
+      foreach ($types as $t) {
+        if ($t['type'] === $type) {
+          echo "Product already exists!";
+          $this->showInventory();
+          return;
+        }
+      }
+
+      $this->model->addProduct($type, $price, $starting_stock);
       $this->showInventory();
     }
   }
@@ -64,8 +77,29 @@ class ProductController
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $types = $_POST['product_type'];
       foreach ($types as $type) {
-        $this->model->removeProductType($type);
+        $this->model->removeProduct($type);
       }
+      $this->showInventory();
+    }
+  }
+
+  public function updateProductPrice()
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $type = $_POST['product_type'];
+      $price = $_POST['price'];
+      $this->model->updateProductPrice($type, $price);
+      $this->showInventory();
+    }
+
+  }
+
+  public function updateProductType()
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $old_type = $_POST['old_product_type'];
+      $new_type = $_POST['new_product_type'];
+      $this->model->updateProductType($old_type, $new_type);
       $this->showInventory();
     }
   }
