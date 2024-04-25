@@ -1,10 +1,24 @@
 <h2>Manage Stock</h2>
 
-<h3>Add New Product Type</h3>
+<h3>Add Product</h3>
 <form action="index.php?route=addProductType" method="post">
   <label for="product_type">Product Type:</label><br>
   <input type="text" id="product_type" name="product_type" required><br>
   <input type="submit" value="Add">
+</form>
+
+<h3>Remove Product</h3>
+<form action="index.php?route=removeProductType" method="post">
+  <?php
+  if (count($result) > 0) {
+    // Output each row
+    foreach ($result as $row) {
+      echo "<input type='checkbox' id='remove_product_type' name='product_type[]' value='" . $row['type'] . "'>";
+      echo "<label for='remove_product_type'>" . $row['type'] . "</label><br>";
+    }
+  }
+  ?>
+  <input type="submit" value="Remove">
 </form>
 
 <h3>Buy Products</h3>

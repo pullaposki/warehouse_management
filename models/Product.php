@@ -18,6 +18,19 @@ class Product
     $statement->execute([':type' => $type]);
   }
 
+  public function removeProductType($type)
+  {
+    $sql = "DELETE FROM products WHERE type = :type";
+    $statement = $this->db->prepare($sql);
+    $statement->execute([':type' => $type]);
+  }
+
+  public function getAllWithQuantities()
+  {
+    $statement = $this->db->prepare("SELECT * FROM products");
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
+  }
 
   public function getAll()
   {

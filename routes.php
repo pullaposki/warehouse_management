@@ -6,7 +6,7 @@ $productController = new ProductController();
 
 switch ($route) {
   case 'inventory':
-    include 'views/inventory.php';
+    $productController->showInventory();
     break;
   case 'manage_stock':
     $productController->showManageStock();
@@ -20,8 +20,11 @@ switch ($route) {
   case 'addProductType':
     $productController->addProductType();
     break;
+  case 'removeProductType':
+    $productController->removeProductTypes();
+    break;
   default:
-    include 'views/inventory.php';
+    $productController->showInventory();
     break;
 }
 ?>

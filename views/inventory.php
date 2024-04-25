@@ -1,7 +1,13 @@
 <h2>Inventory</h2>
-<?php
-require_once __DIR__ . '/../controllers/WarehouseController.php';
-$controller = new WarehouseController();
-$productCount = $controller->getQuantity();
-echo "Total quantity of products in the warehouse: $productCount";
-?>
+<table>
+  <tr>
+    <th>Product Type</th>
+    <th>Quantity</th>
+  </tr>
+  <?php foreach ($result as $product): ?>
+    <tr>
+      <td><?= $product['type'] ?></td>
+      <td><?= $product['quantity'] ?></td>
+    </tr>
+  <?php endforeach; ?>
+</table>

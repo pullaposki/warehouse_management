@@ -16,11 +16,9 @@ class ProductController
     include 'views/products.php';
   }
 
-
-
   public function showInventory()
   {
-    $result = $this->getAll(); // used by the view to display products
+    $result = $this->model->getAllWithQuantities();
     include 'views/inventory.php';
   }
 
@@ -57,6 +55,17 @@ class ProductController
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $type = $_POST['product_type'];
       $this->model->addProductType($type);
+      $this->showInventory();
+    }
+  }
+
+  public function removeProductTypes()
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $types = $_POST['product_type'];
+      foreach ($types as $type) {
+        $this->model->removeProductType($type);
+      }
       $this->showInventory();
     }
   }
