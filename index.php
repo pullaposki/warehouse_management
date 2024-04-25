@@ -11,17 +11,10 @@
   <h1>Warehouse</h1>
 
   <?php
-
-  require_once __DIR__ . '/db/DbConnector.php';
-  $dbConnector = new DbConnector();
-  $connection = $dbConnector->connect();
-  
-  if ($connection === null) {
-      echo "Failed to connect to the database.";
-  } else {
-      echo "Connected to the database successfully.";
-  }
+  require_once __DIR__ . '/views/navbar.php';
+  require_once 'routes.php';
   ?>
+
 </body>
 
 </html>

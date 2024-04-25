@@ -11,6 +11,13 @@ class Product
     $this->db = (new DbConnector())->connect();
   }
 
+  public function addProductType($type)
+  {
+    $sql = "INSERT INTO products (type) VALUES (:type)";
+    $statement = $this->db->prepare($sql);
+    $statement->execute([':type' => $type]);
+  }
+
 
   public function getAll()
   {

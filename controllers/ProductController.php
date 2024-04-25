@@ -16,6 +16,20 @@ class ProductController
     include 'views/products.php';
   }
 
+
+
+  public function showInventory()
+  {
+    $result = $this->getAll(); // used by the view to display products
+    include 'views/inventory.php';
+  }
+
+  public function showManageStock()
+  {
+    $result = $this->getTypes(); // used by the view to display product types
+    include 'views/manage_stock.php';
+  }
+
   public function showBuyForm()
   {
     $result = $this->getTypes(); // used by the view to display product types
@@ -38,22 +52,32 @@ class ProductController
     return $this->model->getDistinctTypes();
   }
 
-  public function post()
+  public function addProductType()
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $type = $_POST['product_type'];
+      $this->model->addProductType($type);
+      $this->showInventory();
+    }
+  }
+
+  public function addToQuantity()
   {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $type = $_POST['product_type'];
       $quantity = $_POST['quantity'];
       $this->model->addQuantity($type, $quantity);
+      $this->showInventory();
     }
   }
 
-  public function remove()
+  public function removeFromQuantity()
   {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $type = $_POST['product_type'];
       $quantity = $_POST['quantity'];
       $this->model->removeQuantity($type, $quantity);
+      $this->showInventory();
     }
   }
-
 }
