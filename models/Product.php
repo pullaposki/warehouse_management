@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../db/DbConnector.php';
+require_once __DIR__ . '/../utils/OperationResult.php';
 
 class Product
 {
@@ -11,32 +12,56 @@ class Product
     $this->db = (new DbConnector())->connect();
   }
 
-  public function addProduct($type, $price, $starting_stock)
+  public function add($type, $price, $starting_stock)
   {
-    $sql = "INSERT INTO products (type, price, quantity) VALUES (:type, :price, :quantity)";
-    $statement = $this->db->prepare($sql);
-    $statement->execute([':type' => $type, ':price' => $price, ':quantity' => $starting_stock]);
+    try {
+      $sql = "INSERT INTO products (type, price, quantity) VALUES (:type, :price, :quantity)";
+      $statement = $this->db->prepare($sql);
+      $statement->execute([':type' => $type, ':price' => $price, ':quantity' => $starting_stock]);
+
+      return new OperationResult(true, 'Product added successfully');
+    } catch (PDOException $e) {
+      return new OperationResult(false, $e->getMessage());
+    }
   }
 
-  public function removeProduct($type)
+  public function remove($type)
   {
-    $sql = "DELETE FROM products WHERE type = :type";
-    $statement = $this->db->prepare($sql);
-    $statement->execute([':type' => $type]);
+    try {
+      $sql = "DELETE FROM products WHERE type = :type";
+      $statement = $this->db->prepare($sql);
+      $statement->execute([':type' => $type]);
+
+      return new OperationResult(true, 'Product removed successfully');
+    } catch (PDOException $e) {
+      return new OperationResult(false, $e->getMessage());
+    }
+
   }
 
-  public function updateProductPrice($type, $price)
+  public function updatePrice($type, $price)
   {
-    $sql = "UPDATE products SET price = :price WHERE type = :type";
-    $statement = $this->db->prepare($sql);
-    $statement->execute([':type' => $type, ':price' => $price]);
+    try {
+      $sql = "UPDATE products SET price = :price WHERE type = :type";
+      $statement = $this->db->prepare($sql);
+      $statement->execute([':type' => $type, ':price' => $price]);
+      return new OperationResult(true, 'Price updated successfully');
+    } catch (PDOException $e) {
+      return new OperationResult(false, $e->getMessage());
+    }
   }
 
-  public function updateProductType($old_type, $new_type)
+  public function updateType($old_type, $new_type)
   {
-    $sql = "UPDATE products SET type = :new_type WHERE type = :old_type";
-    $statement = $this->db->prepare($sql);
-    $statement->execute([':old_type' => $old_type, ':new_type' => $new_type]);
+    try{
+      $sql = "UPDATE products SET type = :new_type WHERE type = :old_type";
+      $statement = $this->db->prepare($sql);
+      $statement->execute([':old_type' => $old_type, ':new_type' => $new_type]);
+      return new OperationResult(true, 'Type updated successfully');
+    }
+    catch (PDOException $e) {
+      return new OperationResult(false, $e->getMessage());
+    }
   }
 
   public function getAllWithQuantities()
@@ -61,69 +86,37 @@ class Product
     return $statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function addQuantity($type, $quantity)
+  public function addToStock($type, $quantity)
   {
-    $sql = "UPDATE products SET quantity = quantity + :quantity WHERE type = :type";
-    $statement = $this->db->prepare($sql);
-    $statement->execute([
-      ':type' => $type,
-      ':quantity' => $quantity
-    ]);
+    try{
+      $sql = "UPDATE products SET quantity = quantity + :quantity WHERE type = :type";
+      $statement = $this->db->prepare($sql);
+      $statement->execute([
+        ':type' => $type,
+        ':quantity' => $quantity
+      ]);
+      return new OperationResult(true, 'Stock updated successfully');
+    }
+    catch (PDOException $e) {
+      return new OperationResult(false, $e->getMessage());
+    }
+    
   }
 
-  public function removeQuantity($type, $quantity)
+  public function removeFromStock($type, $quantity)
   {
-    $sql = "UPDATE products SET quantity = quantity - :quantity WHERE type = :type";
-    $statement = $this->db->prepare($sql);
-    $statement->execute([
-      ':type' => $type,
-      ':quantity' => $quantity
-    ]);
+    try{
+      $sql = "UPDATE products SET quantity = quantity - :quantity WHERE type = :type";
+      $statement = $this->db->prepare($sql);
+      $statement->execute([
+        ':type' => $type,
+        ':quantity' => $quantity
+      ]);
+      return new OperationResult(true, 'Stock updated successfully');
+    }
+    catch (PDOException $e) {
+      return new OperationResult(false, $e->getMessage());
+    }
+    
   }
-
-  public function add($type, $price, $quantity)
-  {
-    $sql = "INSERT INTO products (type, price, quantity) VALUES (:type, :price, :quantity)";
-
-    $statement = $this->db->prepare($sql);
-    $statement->execute([
-      ':type' => $type,
-      ':price' => $price,
-      ':quantity' => $quantity
-    ]);
-  }
-
-
-
-  public function remove($id)
-  {
-    $sql = "DELETE FROM products WHERE id = :id";
-
-    $statement = $this->db->prepare($sql);
-    $statement->execute([':id' => $id]);
-  }
-
-
-  public function removeProducts($type, $quantity)
-  {
-    // Get the IDs of the newest products of the given type and name
-    $sql = "SELECT id FROM products WHERE type = ? ORDER BY id DESC LIMIT ?";
-    $statement = $this->db->prepare($sql);
-    $statement->bindValue(1, $type, PDO::PARAM_STR);
-    $statement->bindValue(2, (int) $quantity, PDO::PARAM_INT);
-    $statement->execute();
-    $ids = $statement->fetchAll(PDO::FETCH_COLUMN);
-
-    // Remove the products
-    $this->removeMultiple($ids);
-  }
-
-  function removeMultiple($ids)
-  {
-    $sql = "DELETE FROM products WHERE id IN (" . implode(',', array_fill(0, count($ids), '?')) . ")";
-
-    $statement = $this->db->prepare($sql);
-    $statement->execute($ids);
-  }
-
 }

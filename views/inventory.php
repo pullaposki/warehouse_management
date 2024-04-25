@@ -1,7 +1,7 @@
 <h2>Inventory</h2>
 <table>
   <tr>
-    <th>Product Type</th>
+    <th>Type</th>
     <th>Stock</th>
     <th>Price</th>
   </tr>

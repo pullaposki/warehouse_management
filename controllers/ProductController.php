@@ -1,19 +1,27 @@
 <?php
 require_once __DIR__ . '/../models/Product.php';
+require_once __DIR__ . '/../services/ProductValidator.php';
 
 class ProductController
 {
   private $model;
+  private $validator;
 
   public function __construct()
   {
     $this->model = new Product();
+    $this->validator = new ProductValidator();
   }
 
   // default action
   public function index()
   {
     include 'views/products.php';
+  }
+
+  public function showError($message)
+  {
+    include 'views/error.php';
   }
 
   public function showInventory()
@@ -24,20 +32,8 @@ class ProductController
 
   public function showProductManagement()
   {
-    $result = $this->getTypes(); // used by the view to display product types
+    $result = $this->getDistinct();
     include 'views/products.php';
-  }
-
-  public function showBuyForm()
-  {
-    $result = $this->getTypes(); // used by the view to display product types
-    include 'views/buy.php';
-  }
-
-  public function showSellForm()
-  {
-    $result = $this->getTypes(); // used by the view to display product types
-    include 'views/sell.php';
   }
 
   public function getAll()
@@ -45,82 +41,137 @@ class ProductController
     return $this->model->getAll();
   }
 
-  public function getTypes()
+  public function getDistinct()
   {
     return $this->model->getDistinctTypes();
   }
 
-  public function addProductType()
+  public function add()
   {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-      $type = $_POST['product_type'];
-      $price = $_POST['price'];
-      $starting_stock = $_POST['starting_stock'];
+    if (!$this->isPostRequest()) {
+      return;
+    }
 
-      // check if a product type with the same name already exists
-      $types = $this->model->getDistinctTypes();
-      foreach ($types as $t) {
-        if ($t['type'] === $type) {
-          echo "Product already exists!";
-          $this->showInventory();
-          return;
-        }
+    $type = $_POST['product_type'];
+    $result = $this->validator->isTypeValid($type);
+    if (!$result->isSuccess()) {
+      $this->showError($result->getMessage());
+      return;
+    }
+    $price = $_POST['price'];
+    if (!$this->validator->isPriceValid($price)) {
+      $this->showError('Invalid price');
+      return;
+    }
+    $starting_stock = $_POST['starting_stock'];
+    if (!$this->validator->isQuantityValid($starting_stock)) {
+      $this->showError('Invalid quantity');
+      return;
+    }
+
+    // check if a product type with the same name already exists
+    $types = $this->model->getDistinctTypes();
+    foreach ($types as $t) {
+      if ($t['type'] === $type) {
+        $this->showError('Product type already exists');
+        return;
       }
-
-      $this->model->addProduct($type, $price, $starting_stock);
-      $this->showInventory();
     }
+
+    $result = $this->model->add($type, $price, $starting_stock);
+    if (!$result->isSuccess()) {
+      $this->showError($result->getMessage());
+      return;
+    }
+
+    $this->showInventory();
   }
 
-  public function removeProductTypes()
+  public function remove()
   {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      $types = $_POST['product_type'];
-      foreach ($types as $type) {
-        $this->model->removeProduct($type);
+    if (!$this->isPostRequest()) {
+      return;
+    }
+
+    $types = $_POST['product_type'];
+    foreach ($types as $type) {
+      $result = $this->model->remove($type);
+      if (!$result->isSuccess()) {
+        $this->showError($result->getMessage());
+        break;
       }
-      $this->showInventory();
     }
+    $this->showInventory();
   }
 
-  public function updateProductPrice()
+  public function updatePrice()
   {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      $type = $_POST['product_type'];
-      $price = $_POST['price'];
-      $this->model->updateProductPrice($type, $price);
-      $this->showInventory();
+    if (!$this->isPostRequest()) {
+      return;
     }
 
+    $type = $_POST['product_type'];
+    $price = $_POST['price'];
+    $result = $this->model->updatePrice($type, $price);
+    if (!$result->isSuccess()) {
+      $this->showError($result->getMessage());
+      return;
+    }
+    $this->showInventory();
   }
 
-  public function updateProductType()
+  public function updateType()
   {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      $old_type = $_POST['old_product_type'];
-      $new_type = $_POST['new_product_type'];
-      $this->model->updateProductType($old_type, $new_type);
-      $this->showInventory();
+    if (!$this->isPostRequest()) {
+      return;
     }
+    $old_type = $_POST['old_product_type'];
+    $new_type = $_POST['new_product_type'];
+    $result = $this->model->updateType($old_type, $new_type);
+    if (!$result->isSuccess()) {
+      $this->showError($result->getMessage());
+      return;
+    }
+    $this->showInventory();
   }
 
-  public function addToQuantity()
+  public function addToStock()
   {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      $type = $_POST['product_type'];
-      $quantity = $_POST['quantity'];
-      $this->model->addQuantity($type, $quantity);
-      $this->showInventory();
+    if (!$this->isPostRequest()) {
+      return;
     }
+
+    $type = $_POST['product_type'];
+    $quantity = $_POST['quantity'];
+    $result = $this->model->addToStock($type, $quantity);
+    if (!$result->isSuccess()) {
+      $this->showError($result->getMessage());
+      return;
+    }
+    $this->showInventory();
   }
 
-  public function removeFromQuantity()
+  public function removeFromStock()
   {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      $type = $_POST['product_type'];
-      $quantity = $_POST['quantity'];
-      $this->model->removeQuantity($type, $quantity);
-      $this->showInventory();
+    if (!$this->isPostRequest()) {
+      return;
     }
+
+    $type = $_POST['product_type'];
+    $quantity = $_POST['quantity'];
+    $result = $this->model->removeFromStock($type, $quantity);
+    if (!$result->isSuccess()) {
+      $this->showError($result->getMessage());
+      return;
+    }
+    $this->showInventory();
   }
+
+  private function isPostRequest()
+  {
+    return $_SERVER['REQUEST_METHOD'] === 'POST';
+  }
+
+
 }
+

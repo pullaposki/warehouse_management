@@ -12,22 +12,22 @@ switch ($route) {
     $productController->showProductManagement();
     break;
   case 'addToQuantity':
-    $productController->addToQuantity();
+    $productController->addToStock();
     break;
   case 'removeFromQuantity':
-    $productController->removeFromQuantity();
+    $productController->removeFromStock();
     break;
   case 'addProduct':
-    $productController->addProductType();
+    $productController->add();
     break;
   case 'removeProduct':
-    $productController->removeProductTypes();
+    $productController->remove();
     break;
   case 'updateProductPrice':
-    $productController->updateProductPrice();
+    $productController->updatePrice();
     break;
   case 'updateProductType':
-    $productController->updateProductType();
+    $productController->updateType();
     break;
   default:
     $productController->showInventory();
