@@ -11,8 +11,9 @@
   <h1>Warehouse</h1>
 
   <?php
+  // phpinfo();
   require_once __DIR__ . '/views/navbar.php';
-  require_once 'routes.php';
+  require_once __DIR__ . '/routes.php';
   ?>
 
 </body>

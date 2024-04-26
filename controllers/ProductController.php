@@ -19,12 +19,17 @@ class ProductController
     include 'views/products.php';
   }
 
+  public function showInfo($message)
+  {
+    include 'views/info.php';
+  }
+
   public function showError($message)
   {
     include 'views/error.php';
   }
 
-  public function showInventory()
+  public function showInventory($message = null)
   {
     $result = $this->model->getAllWithQuantities();
     include 'views/inventory.php';
@@ -84,7 +89,7 @@ class ProductController
       return;
     }
 
-    $this->showInventory();
+    $this->showInventory($result->getMessage());
   }
 
   public function remove()
@@ -101,7 +106,9 @@ class ProductController
         break;
       }
     }
-    $this->showInventory();
+    
+
+    $this->showInventory($result->getMessage());
   }
 
   public function updatePrice()
@@ -117,7 +124,7 @@ class ProductController
       $this->showError($result->getMessage());
       return;
     }
-    $this->showInventory();
+    $this->showInventory($result->getMessage());
   }
 
   public function updateType()
@@ -132,7 +139,7 @@ class ProductController
       $this->showError($result->getMessage());
       return;
     }
-    $this->showInventory();
+    $this->showInventory($result->getMessage());
   }
 
   public function addToStock()
@@ -148,7 +155,7 @@ class ProductController
       $this->showError($result->getMessage());
       return;
     }
-    $this->showInventory();
+    $this->showInventory($result->getMessage());
   }
 
   public function removeFromStock()
@@ -164,14 +171,12 @@ class ProductController
       $this->showError($result->getMessage());
       return;
     }
-    $this->showInventory();
+    $this->showInventory($result->getMessage());
   }
 
   private function isPostRequest()
   {
     return $_SERVER['REQUEST_METHOD'] === 'POST';
   }
-
-
 }
 

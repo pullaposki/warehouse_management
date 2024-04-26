@@ -1,4 +1,10 @@
 <h2>Inventory</h2>
+<?php 
+if ($message !== null) {
+  include 'views/info.php';
+}
+?>
+
 <table>
   <tr>
     <th>Type</th>

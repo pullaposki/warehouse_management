@@ -19,7 +19,7 @@ class Product
       $statement = $this->db->prepare($sql);
       $statement->execute([':type' => $type, ':price' => $price, ':quantity' => $starting_stock]);
 
-      return new OperationResult(true, 'Product added successfully');
+      return new OperationResult(true, 'Product ' . $type . ' added successfully');
     } catch (PDOException $e) {
       return new OperationResult(false, $e->getMessage());
     }
@@ -32,7 +32,7 @@ class Product
       $statement = $this->db->prepare($sql);
       $statement->execute([':type' => $type]);
 
-      return new OperationResult(true, 'Product removed successfully');
+      return new OperationResult(true, 'Product ' . $type . ' removed successfully');
     } catch (PDOException $e) {
       return new OperationResult(false, $e->getMessage());
     }

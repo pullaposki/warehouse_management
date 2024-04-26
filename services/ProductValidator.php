@@ -12,7 +12,7 @@ class ProductValidator
       return new OperationResult(false, 'Type cannot be empty');
     }
 
-    $isValidInput = preg_match('/^[a-zA-Z ]+$/', $type);
+    $isValidInput = preg_match('/^[a-zA-Z0-9 ]+$/', $type);
     if (!$isValidInput) {
       return new OperationResult(false, 'Type can only contain letters and spaces');
     }
